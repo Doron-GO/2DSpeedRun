@@ -1,0 +1,22 @@
+{ "columns":4,
+ "editorsettings":
+    {
+     "export":
+        {
+         "format":"json",
+         "target":"stageTSX_.json"
+        }
+    },
+ "image":"Src/Img/stageChip3.png",
+ "imageheight":96,
+ "imagewidth":128,
+ "margin":0,
+ "name":"stage_2",
+ "spacing":0,
+ "tilecount":12,
+ "tiledversion":"1.8.2",
+ "tileheight":32,
+ "tilewidth":32,
+ "type":"tileset",
+ "version":"1.8"
+}

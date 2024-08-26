@@ -1,0 +1,76 @@
+ <?xml version= "1.0" encoding= "UTF-8"?>
+ <actionList name ="Player4" virsion = "1.0">
+	<action name = "Run" source = "Src/Img/PlayerImage/Run4.png" divSizeX ="50" divSizeY ="37" divCntX = "1" divCntY = "6">
+		<anime loop ="-1" encoding = "csv">
+			0,5,0,0,49,37,
+			1,5,0,0,49,37,
+			2,5,0,0,49,37,
+			3,5,0,0,49,37,
+			4,5,0,0,49,37,
+			5,5,0,0,49,37
+
+		</anime>
+	</action>
+	<action name = "Idle" source = "Src/Img/PlayerImage/Idle4.png" divSizeX ="50" divSizeY ="37" divCntX = "4" divCntY = "1">
+		<anime loop ="-1" encoding = "csv">
+			0,4,0,0,50,37,
+			1,4,0,0,50,37,
+			2,4,0,0,50,37,
+			3,4,0,0,50,37
+		</anime>
+	</action>
+	<action name = "Jump" source = "Src/Img/PlayerImage/jump4.png" divSizeX ="50" divSizeY ="37" divCntX = "4" divCntY = "1">
+		<anime loop ="0" encoding = "csv">
+			0,2,0,0,50,37,
+			1,2,0,0,50,37,
+			2,2,0,0,50,37,
+			3,2,0,0,50,37
+		</anime>
+	</action>
+		<action name = "Fall" source = "Src/Img/PlayerImage/fall4.png" divSizeX ="50" divSizeY ="37" divCntX = "6" divCntY = "1">
+		<anime loop ="0" encoding = "csv">
+			0,2,0,0,50,37,
+			1,2,0,0,50,37,
+			2,2,0,0,50,37,
+			3,2,0,0,50,37,
+			4,2,0,0,50,37,
+			5,2,0,0,50,37
+		</anime>
+	</action>
+		<action name = "Slide" source = "Src/Img/PlayerImage/slide4.png" divSizeX ="50" divSizeY ="37" divCntX = "5" divCntY = "1">
+		<anime loop ="0" encoding = "csv">
+			0,10,0,0,50,37,
+			1,10,0,0,50,37,
+			2,10,0,0,50,37,
+			3,10,0,50,37,
+			4,10,0,0,50,37
+		</anime>
+	</action>
+		<action name = "WallSlide" source = "Src/Img/PlayerImage/wall-slide4.png" divSizeX ="50" divSizeY ="37" divCntX = "2" divCntY = "1">
+		<anime loop ="-1" encoding = "csv">
+			0,10,0,0,50,37,
+			1,10,0,0,50,37
+		</anime>
+	</action>
+			<action name = "Dmage" source = "Src/Img/PlayerImage/damage4.png" divSizeX ="50" divSizeY ="37" divCntX = "2" divCntY = "1">
+		<anime loop ="-1" encoding = "csv">
+			0,10,0,0,50,37,
+			1,10,0,0,50,37
+		</anime>
+	</action>
+		<action name = "Win" source = "Src/Img/PlayerWin4.png" divSizeX ="50" divSizeY ="37" divCntX = "1" divCntY = "11">
+		<anime loop ="0" encoding = "csv">
+			0,2,0,0,50,37,
+			1,2,0,0,50,37,
+			2,2,0,0,50,37,
+			3,2,0,0,50,37,
+			4,2,0,0,50,37,
+			5,2,0,0,50,37,
+			6,2,0,0,50,37,
+			7,2,0,0,50,37,
+			8,2,0,0,50,37,
+			9,2,0,0,50,37,
+			10,2,0,0,50,37
+		</anime>
+	</action>
+</actionList>
