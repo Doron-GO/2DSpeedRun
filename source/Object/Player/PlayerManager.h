@@ -2,6 +2,8 @@
 #include<memory>
 #include<vector>
 #include<algorithm>
+#include<map>
+#include"../Stage/CheckPoint.h"
 #include"../../Common/Vector2D.h"
 #include"../../Common/Collision.h"
 #include"../../Input/Input.h"
@@ -17,7 +19,7 @@ class PlayerManager
 
 public:
 
-	enum class PLAYER_NUM
+	enum class PLAYER_TYPE
 	{
 		P_1,
 		P_2,
@@ -40,7 +42,7 @@ public:
 	const Players GetPlayers();
 
 	//次のチェックポイントに一番近いプレイヤーを検索する(背bン頭プレイヤー)
-	void SearchFirstPlayer(std::pair< bool,Vector2DFloat> checkPoint );
+	void SearchFirstPlayer(std::pair< CheckPoint::DIRCTION,Vector2DFloat> checkPoint );
 
 	//自身から一番近いプレイヤーを検索するし、その情報を配列に格納する
 	void SearchHormingPlayer();
@@ -55,13 +57,13 @@ public:
 	void CollisionItem();
 
 	//１フレーム前の先頭プレイヤー番号の取得
-	const PLAYER_NUM GetOldFirstPlayerNum();
+	const PLAYER_TYPE GetOldFirstPlayerNum();
 
 	//現フレームの先頭プレイヤー番号の取得
-	const PLAYER_NUM GetNewFirstPlayerNum();
+	const PLAYER_TYPE GetNewFirstPlayerNum();
 
 	//先頭プレイヤー番号の更新
-	void UpdateFirstPlayerNum();
+	void UpdateFirstPlayerType();
 
 	//矩形同士の衝突判定
 	bool IsRectCollision(Vec pMin, Vec pMax, Vec iMin, Vec iMax);
@@ -77,13 +79,25 @@ public:
 
 private:
 
+	enum class IMG_TYPE
+	{
+		WIN,
+		RESTART
+	};
+
+
+	std::map<IMG_TYPE, int>img_;
+
 	//プレイヤー配列
 	Players players_;
 
+	//チェックポイントとプレイヤー間の距離
+	std::vector< std::pair<int, float>> checkPointToPlayerDistance_;//firstはパッドナンバー:secondはdistance
+
 	//1フレーム前の先頭プレイヤー番号
-	PLAYER_NUM oldFirstPlayerNum_;
+	PLAYER_TYPE oldFirstPlayerNum_;
 	//現フレームの先頭プレイヤー番号
-	PLAYER_NUM newFirstPlayerNum_;
+	PLAYER_TYPE newFirstPlayerNum_;
 
 	//プレイヤーが最後の一人になったかどうかの判定(OutSideクラスで判定)
 	bool &conclusion_;
@@ -104,6 +118,9 @@ private:
 
 	//シングルプレイモードかどうかを判定する
 	bool singlePlay_;
+
+	//画像の初期化
+	void InitImage(void);
 
 };
 

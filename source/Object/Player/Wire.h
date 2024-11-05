@@ -2,7 +2,8 @@
 #include"../../Common/Vector2D.h"
 #include"../../Common/Raycast.h"
 #include "../../Common/Time.h"
-#include"Player.h"
+
+class Player;
 
 class Wire
 {

@@ -15,6 +15,7 @@ Stage::Stage()
 	loadMap_.LoadTSX(PATH_JSON_TSX.c_str());
 	loadMap_.LoadStage(PATH_JSON_STAGE.c_str());
 	blocks_ = std::make_unique<Blocks>(loadMap_);
+
 }
 
 Stage::~Stage()
@@ -49,26 +50,20 @@ void Stage::Draw(Vector2DFloat cameraPos)
 	int cameraY = static_cast<int> ( cameraPos.y);
 	for (const auto& layer : loadMap_.GetMapData()) 
 	{
-
-		int size = static_cast<int>(layer.second.size());
-
 		for (int y = 0; y < worldArea.y; y++)
 		{
 			for (int x = 0; x < worldArea.x; x++)
 			{
-				if (x + y * worldArea.x >= size)
+				if (x + y * worldArea.x < layer.second.size())
 				{
-					continue;
+					auto gid = layer.second[x + y * worldArea.x];
+					if (gid >= 0&& !(gid==5)&&!(gid == 6))
+					{
+						DrawGraph(x *X + cameraX, y *Y+ cameraY,
+							ImageMng::GetInstsnce().GetID(loadMap_.GetMapKey())
+							[gid], true);
+					}
 				}
-
-				auto gid = layer.second[x + y * worldArea.x];
-				if (gid >= 0&& !(gid==5)&&!(gid == 6))
-				{
-					DrawGraph(x *X + cameraX, y *Y+ cameraY,
-						ImageMng::GetInstsnce().GetID(loadMap_.GetMapKey())
-						[gid], true);
-				}
-				
 			}
 		}
 	}

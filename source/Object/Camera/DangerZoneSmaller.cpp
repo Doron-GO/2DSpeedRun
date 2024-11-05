@@ -1,5 +1,17 @@
 #include "DangerZoneSmaller.h"
 
+//k¬ŠJŽnŽžŠÔ
+constexpr int SHRINK_START_TIME = 100;
+
+//Žûk‚·‚é‚Æ‚«‚ÌÅ¬ƒTƒCƒY
+const Vector2DFloat MAX_SHRINK_SIZE = { 200.0f,150.0f };
+
+//k¬—Ê
+const Vector2DFloat SCALE_STEP = { 0.2f, 0.13f };
+
+const int COUNT_RATE = 10;
+
+
 DangerZoneSmaller::DangerZoneSmaller(Vector2DFloat& max, Vector2DFloat& min):outSideMax_(max),outSideMin_(min)
 {
 	_update = &DangerZoneSmaller::UpdateWait;
@@ -26,12 +38,16 @@ void DangerZoneSmaller::Update()
 
 void DangerZoneSmaller::UpdateWait()
 {
-	auto count = (count_ / 10);
-	if (count>= SHRINK_START_TIME)
+	int count = (count_ / COUNT_RATE);
+
+	if (count<SHRINK_START_TIME)
+	{
+		count_++;
+	}
+	else
 	{
 		Activated();
 	}
-	else{count_++;}
 }
 void DangerZoneSmaller::Activated()
 {

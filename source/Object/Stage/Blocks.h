@@ -13,8 +13,6 @@ class Blocks
 
 public:
 
-	// ※コメント必要
-
 	static constexpr int BLOCK_COUNT_MAX= 30;
 
 	struct Block

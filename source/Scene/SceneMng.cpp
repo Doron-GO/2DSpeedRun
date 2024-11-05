@@ -44,8 +44,6 @@ void SceneMng::Update(Input& input)
 
 void SceneMng::Draw()
 {
-	//SetDrawScreen(DX_SCREEN_BACK);
-
 	auto rit = scenes_.rbegin();
 	for (; rit != scenes_.rend(); rit++)
 	{

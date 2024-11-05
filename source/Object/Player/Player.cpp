@@ -544,12 +544,12 @@ void Player::MoveColision()
 	}
 }
 
-const bool& Player::IsWinner(void)
+bool Player::IsWinner(void)
 {
 	return ((_state == &Player::WinnerState) || (_state == &Player::WinnerFallState));
 }
 
-const bool& Player::IsSwingState(void)
+bool Player::IsSwingState(void)
 {
 	return (_state == &Player::SwingState);
 }
@@ -628,14 +628,7 @@ bool Player::IsWall()
 
 void Player::BlocksCollision()
 {
-
-	auto size = blocks_.GetBlockList().size();
-	for (int i = 0; i < size; i++)
-	{
-
-	}
-
-	for (auto& block : blocks_.GetBlockList())
+	for (auto& block:blocks_.GetBlockList())
 	{
 		if (!block.blockFlag_)
 		{
@@ -697,7 +690,7 @@ void Player::SetTarget(Vector2DFloat targetPos)
 	targetPos_ = targetPos;
 }
 
-const std::shared_ptr<ItemBase> Player::GetItem()const
+const std::shared_ptr<ItemBase> Player::GetItem()
 {
 	return item_;
 }
@@ -720,42 +713,7 @@ void Player::Damage(ItemBase::ITEM_TYPE type)
 	PlaySoundMem(explosionSounds_[EXP_SOUND_TYPE::LAUNCHER], DX_PLAYTYPE_BACK, true);
 }
 
-const Vector2DFloat& Player::GetPlayerPos(void) const
-{
-	return pos_;
-}
-
-void Player::SetPlayerPos(Vector2DFloat& pos)
-{
-	pos_ = pos;
-}
-
-const Vector2DFloat& Player::GetMovePow(void) const
-{
-	return movePow_;
-}
-
-void Player::SetMovePow(Vector2DFloat& pow)
-{
-	movePow_ = pow;
-}
-
-const  Player::COL_RECT Player::GetCol_Rect(void) const
-{
-	return colRect_;
-}
-
-const int& Player::GetPadNum(void) const
-{
-	return padNum_;
-}
-
-const Player::DIR_LR& Player::GetDir_LR(void) const
-{
-	return dir_LR_;
-}
-
-const bool& Player::IsWin(void)
+const bool Player::IsWin()
 {
 	return winFlag_;
 }
@@ -903,25 +861,8 @@ void Player::Anchoring(Input& input)
 			}
 		}
 	}
-
-
-	if (!(_state == &Player::MoveState) && !(_state == &Player::SwingState) && !(_state == &Player::WallGrabState))
-	{
-		if (input.IsTriggerd("hook"))
-		{
-			slideY_ = -35.0f;
-			if (CollisionDown() && CollisionVec(moveVec_) && CollisionVec(diagonallyVec_))
-			{
-				AnimeMng::GetInstance().SetAnime(animeStr_, "Jump");
-				wire_->SetAnchorPalam();
-				AnchoringFlag_ = true;
-			}
-		}
-	}
-
-
 	//スイングステートではないときに、ボタンが押され続けていたらワイヤーを伸ばす
-	if (!(_state == &Player::SwingState) && AnchoringFlag_)
+	if (!(_state == &Player::SwingState)&&AnchoringFlag_)
 	{
 		if (input.IsPrassed("hook"))
 		{
@@ -971,7 +912,6 @@ void Player::Jump(Input& input)
 			movePow_.y = 0.0f;
 			_state = &Player::JumpState;
 		}
-
 		if (((_state == &Player::FallState)|| (_state == &Player::SwingJumpState))&&doubleJump_)
 		{
 			AnimeMng::GetInstance().SetAnime(animeStr_, "Jump");
@@ -979,7 +919,6 @@ void Player::Jump(Input& input)
 			doubleJump_ = false;
 			_state = &Player::JumpState;
 		}
-
 	}
 }
 

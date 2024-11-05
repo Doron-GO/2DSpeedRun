@@ -1,27 +1,28 @@
 #include "CheckPoint.h"
 #include"../../Object/Player/Player.h"
 
+constexpr int CHECKPOINT_MAX = 6;
+
 CheckPoint::CheckPoint(std::vector<std::shared_ptr<Player>> players, PointColList checkpoint)
-	:players_(players), checkPointColList_(checkpoint), goalFlag_(false),_work(&CheckPoint::MultiPlay)
+	:players_(players), checkPointColList_(checkpoint), goalFlag_(false),update_(&CheckPoint::MultiPlayUpdate)
 {
 
 	//àÍî‘âE
-	checkPoints_.push_back(std::pair<bool, Vector2DFloat>{ false,{9800.0f,0.0f} });
+	checkPoints_.push_back(std::pair<DIRCTION, Vector2DFloat>{ DIRCTION::VERTICAL,{9800.0f,0.0f} });
 	//àÍî‘Å™
-	checkPoints_.push_back(std::pair<bool, Vector2DFloat>{ true,{0.0f,0.0f} });
+	checkPoints_.push_back(std::pair<DIRCTION, Vector2DFloat>{ DIRCTION::HORIZONTAL, { 0.0f,0.0f } });
 	//àÍî‘ç∂
-	checkPoints_.push_back(std::pair<bool, Vector2DFloat>{ false,{0.0f,0.0f} });
+	checkPoints_.push_back(std::pair<DIRCTION, Vector2DFloat>{ DIRCTION::VERTICAL, { 0.0f,0.0f } });
 	//àÍî‘â∫
-	checkPoints_.push_back(std::pair<bool, Vector2DFloat>{ true,{0.0f,3000.0f} });
+	checkPoints_.push_back(std::pair<DIRCTION, Vector2DFloat>{ DIRCTION::HORIZONTAL, { 0.0f,3000.0f } });
 	//àÍî‘âE
-	checkPoints_.push_back(std::pair<bool, Vector2DFloat>{ false,{9800.0f,0.0f} });
+	checkPoints_.push_back(std::pair<DIRCTION, Vector2DFloat>{ DIRCTION::VERTICAL, { 9800.0f,0.0f } });
 	//àÍî‘â∫
-	checkPoints_.push_back(std::pair<bool, Vector2DFloat>{ true,{0.0f,3000.0f} });
+	checkPoints_.push_back(std::pair<DIRCTION, Vector2DFloat>{ DIRCTION::HORIZONTAL, { 0.0f,3000.0f } });
 	//àÍî‘ç∂
-	checkPoints_.push_back(std::pair<bool, Vector2DFloat>{ false,{0.0f,0.0f} });
+	checkPoints_.push_back(std::pair<DIRCTION, Vector2DFloat>{ DIRCTION::VERTICAL, { 0.0f,0.0f } });
 	//àÍî‘â∫
-	checkPoints_.push_back(std::pair<bool, Vector2DFloat>{ true,{0.0f,3000.0f} });
-
+	checkPoints_.push_back(std::pair<DIRCTION, Vector2DFloat>{ DIRCTION::HORIZONTAL , { 0.0f,3000.0f } });
 
 	currentCheckPoint_ = 0;
 }
@@ -36,18 +37,17 @@ void CheckPoint::Update()
 	{
 		if (player->IsAlive())
 		{
-			auto& colRect = player->GetCol_Rect();
 			if (rayCast_.RectToRectCollision(checkPointColList_[currentCheckPoint_].first, checkPointColList_[currentCheckPoint_].second,
-				colRect.min_, colRect.max_))
+			player->colRect_.min_, player->colRect_.max_))
 			{
-				(this->*_work)();
+				(this->*update_)();
 				break;
 			}
 		}
 	}
 }
 
-std::pair<bool, Vector2DFloat> CheckPoint::GetCheckPoint2() const
+std::pair<CheckPoint::DIRCTION, Vector2DFloat> CheckPoint::GetCheckPoint() const
 {
 	return checkPoints_[currentCheckPoint_];
 }
@@ -57,12 +57,12 @@ const bool CheckPoint::IsGoal()
 	return goalFlag_;
 }
 
-void CheckPoint::SetSingleMode()
+void CheckPoint::SetSinglePlayMode()
 {
-	_work = &CheckPoint::SinglePlay;
+	update_ = &CheckPoint::SinglePlayUpdate;
 }
 
-void CheckPoint::SinglePlay()
+void CheckPoint::SinglePlayUpdate()
 {
 	if (currentCheckPoint_ < CHECKPOINT_MAX)
 	{ 
@@ -75,7 +75,7 @@ void CheckPoint::SinglePlay()
 	}
 }
 
-void CheckPoint::MultiPlay()
+void CheckPoint::MultiPlayUpdate()
 {
 	if (currentCheckPoint_ < CHECKPOINT_MAX) { currentCheckPoint_++; }
 	else

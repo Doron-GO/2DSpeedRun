@@ -7,34 +7,57 @@
 #include<list>
 
 class Player;
-constexpr int CHECKPOINT_MAX =6;
+using CHECKPOINT_SAKUJO= std::pair<bool, Vector2DFloat>;
 
 class CheckPoint
 {
 public:
 
+	//チェックポイントの方向
+	enum class DIRCTION
+	{	
+		//水平
+		HORIZONTAL,
+		//垂直
+		VERTICAL
+	};
+
 	CheckPoint(std::vector<std::shared_ptr<Player>> players, PointColList checkpoint);
 	~CheckPoint();
 
+	//アップデート
 	void Update();
-	std::pair<bool, Vector2DFloat> GetCheckPoint2()const;
-	const bool IsGoal();
-	void SetSingleMode();
 
-	void SinglePlay();
-	void MultiPlay();
+	//チェックポイントの取得
+	std::pair<DIRCTION, Vector2DFloat> GetCheckPoint()const;
+
+	//ゴールをしたかどうか
+	const bool IsGoal();
+
+	//シングルモードに切り替える
+	void SetSinglePlayMode();
+
+	//シングルモードアップデート
+	void SinglePlayUpdate();
+
+	//対戦モードアップデート
+	void MultiPlayUpdate();
+
+
 private:
 
-	void (CheckPoint::* _work)();
+	void (CheckPoint::* update_)();
 
+	//プレイヤー情報
 	std::vector<std::shared_ptr<Player>> players_;
 
-	//ペア―の入った配列
-	//first:プレイヤーが向かう方向が上下なのか左右なのかを判定 true:上下　false:左右
-	//second: チェックポイント座標
-	std::vector < std::pair<bool, Vector2DFloat>> checkPoints_;
+	//pairを配列に格納
+	//first:trueなら横方向のチェックポイント false:縦方向のチェックポイント
+	// second:チェックポイントの座標
+	std::vector < std::pair<bool, Vector2DFloat>> checkPoints_sakujo;
+	std::vector < std::pair<DIRCTION, Vector2DFloat>> checkPoints_;
 
-	//当たり判定クラス
+	//当たり判定
 	Raycast rayCast_;
 
 	//チェックポイント当たり判定リスト

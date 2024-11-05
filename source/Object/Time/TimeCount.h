@@ -1,4 +1,6 @@
 #pragma once
+#include<functional>
+#include<map>
 
 class CheckPoint;
 
@@ -10,28 +12,39 @@ public:
 
 	void Update(float startime);
 	void Draw();
-	void GoalUpdate(float startime);
+	void GoalUpdate();
 	void GoalDraw();
-	void GameUpdate(float startime);
+	void GameUpdate();
 	void GameDraw();
 	void SingleDraw();
 	void SetStart();
 	bool IsEnd();
 	float ElapsedTime();
 	void Count();
-	void SinglePlay();
+	void SetSinglePlayMode();
 
 private:
 
-	void (TimeCount::* _update)(float startime);
-	void (TimeCount::* _draw)();
+	enum class STATE
+	{
+		GAME,
+		GOAL,
+		SINGLE
+	};
+
+	STATE state_;
+
+	std::map<STATE, std::function<void(void)>> draw_;
+	std::map<STATE, std::function<void(void)>> update_;
 
 	CheckPoint& checkPoint_;
-	int fontHandle_;
+	int finalRecordFontHandle_;
+	int recordFontHandle_;
 	int goalImg_;
 	int restertImg_ ;
 	bool endFlag_;
 
+	float startTime_;
 	bool startFlag_;//計測開始フラグ;
 	float deltaTime_ ;
 	float nowTime_ ;

@@ -27,7 +27,7 @@ void Wire::Update()
 
 void Wire::Draw(Vector2DFloat cameraPos)
 {
-	Vector2DFloat pPos = player_.GetPlayerPos();
+	Vector2DFloat pPos = player_.pos_;
 	pPos += cameraPos;
 	if (_state== &Wire::SwingState|| _state == &Wire::AnchoringState)
 	{
@@ -44,20 +44,17 @@ void Wire::Draw(Vector2DFloat cameraPos)
 void Wire::SwingState()
 {
 	float gravity = 0.5f;
-	Vector2DFloat pPos = player_.GetPlayerPos();
-
 	//アングルをけってい
-	angle_ = atan2f(pPos.x - fulcrum_.x, pPos.y - fulcrum_.y);
+	angle_ = atan2f(player_.pos_.x - fulcrum_.x, player_.pos_.y - fulcrum_.y);
 	v_ += gravity * sinf(angle_);
 	vel_ = { -v_ * cosf(angle_),v_ * sinf(angle_) };
 	Vector2DFloat vel = { vel_.x,vel_.y };
 	if (_state == &Wire::SwingState)
 	{
-		pPos = fulcrum_ + (pPos - fulcrum_).Normalized() * length_;//長さを補正
-		pPos += vel;	//velを加算
-		player_.SetPlayerPos(pPos);
+		player_.pos_ = fulcrum_ + (player_.pos_ - fulcrum_).Normalized() * length_;//長さを補正
+		player_.pos_ += vel;	//velを加算
 	}
-	if (pPos.y <= fulcrum_.y + -150.0f)
+	if (player_.pos_.y <= fulcrum_.y + -150.0f)
 	{
 		SwingJump();
 		player_.StartSwingJump();
@@ -66,15 +63,13 @@ void Wire::SwingState()
 
 void Wire::StandbyState()
 {
-	Vector2DFloat pPos = player_.GetPlayerPos();
-
-	fulcrum_ = pPos;
+	fulcrum_ = player_.pos_;
 }
 
 void Wire::SwingJump()
 {
-	Vector2DFloat pow = { vel_.x / 1.3f ,vel_.x / 1.3f};
-	player_.SetMovePow(pow);
+	player_.movePow_.x = (vel_.x / 1.3f);
+	player_.movePow_.y = (vel_.y / 1.3f);
 	_state = &Wire::EndSwingState;
 }
 
@@ -101,15 +96,14 @@ void Wire:: AnchoringState()
 
 void Wire::SetSwingPalam()
 {	
-	auto pPos = player_.GetPlayerPos();
-	auto lVec = pPos - fulcrum_;//支点→錘のベクトル(紐)
+	auto lVec = player_.pos_ - fulcrum_;//支点→錘のベクトル(紐)
 	length_ = lVec.Magnitude();							//紐の長さ
-	vel_.x = player_.GetMovePow().x;	//初速度的な
+	vel_.x = player_.movePow_.x;	//初速度的な
 	//ここでアングルの初期設定をする
-	angle_ = atan2f(pPos.x - fulcrum_.x, pPos.y - fulcrum_.y);
+	angle_ = atan2f(player_.pos_.x - fulcrum_.x, player_.pos_.y - fulcrum_.y);
 	v_ = -2 * vel_.x * cosf(angle_);//x軸の速度
 
-	if (player_.GetDir_LR() == Player::DIR_LR::LEFT)
+	if (player_.dir_LR_ == Player::DIR_LR::LEFT)
 	{
 		pow_ = 0.15f;
 	}
@@ -123,7 +117,7 @@ void Wire::SetSwingPalam()
 
 void Wire::SetAnchorPalam()
 {
-	fulcrum_ = player_.GetPlayerPos();
+	fulcrum_ = player_.pos_;
 	VECTOR moveVec = { player_.GetDiagonallyVecVec().x,
 		(-35.0f)+17.0f};
 	moveVec_.x = moveVec.x/2.0f;

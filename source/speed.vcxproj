@@ -166,7 +166,6 @@
     <ClCompile Include="Object\Item\Missile.cpp" />
     <ClCompile Include="Manager\AnimMng.cpp" />
     <ClCompile Include="Manager\ImageMng.cpp" />
-    <ClCompile Include="Object\Shader\PostEfffect.cpp" />
     <ClCompile Include="Object\Stage\Blocks.cpp" />
     <ClCompile Include="Object\Stage\CheckPoint.cpp" />
     <ClCompile Include="Object\Stage\LoadMap.cpp" />
@@ -204,7 +203,6 @@
     <ClInclude Include="Object\Item\Missile.h" />
     <ClInclude Include="Manager\AnimMng.h" />
     <ClInclude Include="Manager\ImageMng.h" />
-    <ClInclude Include="Object\Shader\PostEfffect.h" />
     <ClInclude Include="Object\Stage\Blocks.h" />
     <ClInclude Include="Object\Stage\CheckPoint.h" />
     <ClInclude Include="Object\Stage\LoadMap.h" />
@@ -229,19 +227,6 @@
     <ClInclude Include="Src\Json\json.hpp" />
     <ClInclude Include="_debug\_DebugConOut.h" />
     <ClInclude Include="_debug\_DebugDispOut.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="Object\Shader\Explosion.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
-      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)/Object/Shader/%(Filename).cso</ObjectFileOutput>
-      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)/Object/Shader/%(Filename).cso</ObjectFileOutput>
-    </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Object\Shader\Pixel\PixelShader2DHeader.hlsli" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

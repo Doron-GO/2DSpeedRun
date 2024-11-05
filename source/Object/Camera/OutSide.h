@@ -60,7 +60,7 @@ public:
 	bool IsOutSide(Vector2DFloat pos);
 
 	//シングルプレイモードに変更
-	void SinglePlay();
+	void SetSinglePlayMode();
 
 	//画面からはみ出した時、上下から出たのか左右から出たのか
 	//true:上下　false: 左右
@@ -91,22 +91,14 @@ private:
 	Camera& camera_;
 
 	//死亡範囲を縮小させるクラス
-	std::unique_ptr<DangerZoneSmaller> dangerZone_;
+	std::unique_ptr<DangerZoneSmaller> dangerZoneSmaller_;
 
-	//画面端左上座標
+	//画面を囲う枠の左上座標
 	Vector2DFloat minPos_;
 	
-	//画面端右下座標
+	//画面を囲う枠の右下座標
 	Vector2DFloat maxPos_;
 
-	//四角の左上
-	const Vector2DFloat OUTSIDE_SCALE = { 800.0f,500.0f };
-
-	//爆発画像の枚数
-	static constexpr int EXPLOSION_IMG_NUM = 8;
-
-	//爆発画像の枚数
-	static constexpr int BIG_EXPLOSION_IMG_NUM = 11;
 
 	//死亡エリアの座標の最大値(四角の右下)
 	Vector2DFloat outSideMax_;
@@ -153,14 +145,19 @@ private:
 	//振動させるコントローラのナンバー
 	int padNum_;
 
+	//爆発画像読み込み情報
+	static const int IMG_EXP_ALL_NUM = 11;
+	//大爆発画像読み込み情報
+	static const int IMG_BIGEXP_ALL_NUM = 8;
+
 	//小爆発画像ハンドル
-	int bombImg_[EXPLOSION_IMG_NUM];
+	int bombImg_[IMG_EXP_ALL_NUM];
 	
 	//大爆発画像ハンドル
-	int bigBombImg_[BIG_EXPLOSION_IMG_NUM];
+	int bigBombImg_[IMG_BIGEXP_ALL_NUM];
 
 	//爆発消去カウント
-	int count_;
+	int expSoundCount_;
 
 	//爆発画像カウント
 	int expCount_  ;

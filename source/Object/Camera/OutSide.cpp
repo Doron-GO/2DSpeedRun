@@ -4,25 +4,77 @@
 #include"../../Object/Player/Player.h"
 #include"DangerZoneSmaller.h"
 
+//爆発画像
 const std::string EXP_IMG_EXPLOSION_PASS = "Src/Img/Explosion.png";
+//大爆発画像
 const std::string EXP_IMG_BIG_EXPLOSION_PASS = "Src/Img/BigExplosion.png";
+//爆発音のパス
 const std::string EXP_SOUND_EXPLOSION_PASS = "Src/Sound/Explosion.mp3";
-
-
+//画面サイズ
 Vector2DFloat screenSize ={1600.0f,1000.0f};
+
+//爆発画像読み込み情報
+const int IMG_EXP_X_NUM = 11;
+const int IMG_EXP_Y_NUM = 1;
+const VECTOR IMG_EXP_SIZE = { 32.0f,32.0f };
+
+//大爆発画像読み込み情報
+const int IMG_BIGEXP_X_NUM = 8;
+const int IMG_BIGEXP_Y_NUM = 1;
+const VECTOR IMG_BIGEXP_SIZE = { 32.0f,32.0f };
+
+//死亡判定の四角の大きさ
+const Vector2DFloat OUTSIDE_SCALE = { 800.0f,500.0f };
+
+//追尾対象切り替えにかかる時間
+const float MAX_SWITCHING_COUNT = 60.0f;
+
+//左に向かって走る
+const Vector2DFloat GO_TO_LEFT = { -20.0f ,0.0f };
+//右に向かって走る
+const Vector2DFloat GO_TO_RIGHT = { 20.0f,0.0f };
+
+//上に向かって走る
+const Vector2DFloat GO_TO_UP = { 0.0f,-20.0f };
+
 
 OutSide::OutSide(Camera& camera, int playerCount) :camera_(camera), playerCount_(playerCount)
 {
-	LoadDivGraph(EXP_IMG_EXPLOSION_PASS.c_str(), 11, 11, 1, 32, 32, bombImg_);
-	LoadDivGraph(EXP_IMG_BIG_EXPLOSION_PASS.c_str(), 8, 8, 1, 32, 32, bigBombImg_);
+	LoadDivGraph(EXP_IMG_EXPLOSION_PASS.c_str(),
+		IMG_EXP_ALL_NUM,
+		IMG_EXP_X_NUM,
+		IMG_EXP_Y_NUM,
+		static_cast<int>(IMG_EXP_SIZE.x),
+		static_cast<int>(IMG_EXP_SIZE.y),
+		bombImg_);
+
+	LoadDivGraph(EXP_IMG_BIG_EXPLOSION_PASS.c_str(),
+		IMG_BIGEXP_ALL_NUM,
+		IMG_BIGEXP_X_NUM,
+		IMG_BIGEXP_Y_NUM,
+		static_cast<int>(IMG_BIGEXP_SIZE.x),
+		static_cast<int>(IMG_BIGEXP_SIZE.y),
+		bigBombImg_);
+
 	ExplosionSound_ = LoadSoundMem(EXP_SOUND_EXPLOSION_PASS.c_str());
+
+	//死亡判定の四角の左下座標
 	outSideMax_ = OUTSIDE_SCALE;
+	//死亡判定の四角の左上座標
 	outSideMin_ = -OUTSIDE_SCALE;
-	dangerZone_ = std::make_unique<DangerZoneSmaller>(outSideMax_, outSideMin_);
+
+	dangerZoneSmaller_ = std::make_unique<DangerZoneSmaller>(outSideMax_, outSideMin_);
+
+	//左上座標は0で設定
 	minPos_ = { 0.0f,0.0f };
-	maxPos_ = { 1600.0f, 1000.0f };
+	//右下座標はスクリーンサイズで設定
+	maxPos_ = screenSize;
+
+	//爆発画像カウントの初期化
 	expCount_ = 0;
+	//追尾対象変更
 	switchingTime_ = 0;
+
 	singlePlayFlag_ = false;
 	bigExploding_ = false;
 	isExploding_ = false;
@@ -46,7 +98,7 @@ void OutSide::Update(std::vector<std::shared_ptr<Player>> players)
 
 	if (!singlePlayFlag_)
 	{
-		dangerZone_->Update();
+		dangerZoneSmaller_->Update();
 		IsDead(players);
 	}
 	if (isExploding_)
@@ -58,7 +110,7 @@ void OutSide::Update(std::vector<std::shared_ptr<Player>> players)
 	{
 		SideChange(lowerPos_, lowerSide_);
 	}
-	dangerZone_->Smaller();
+	dangerZoneSmaller_->Smaller();
 }
 
 
@@ -66,19 +118,22 @@ void OutSide::MoveChainExplosion(void)
 {
 	if (lowerPos_.y <= minPos_.y && lowerPos_.x >= maxPos_.x)
 	{
-		lowerVec_ = { -20.0f ,0.0f };
+		lowerVec_ = GO_TO_RIGHT;
 		lowerSide_ = SIDE::UP;
 	}
 	//画面右下なら上に行く
 	if (lowerPos_.x >= maxPos_.x && lowerPos_.y >= maxPos_.y)
 	{
-		lowerVec_ = { 0.0f,-20.0f };
+
+		lowerVec_ = GO_TO_UP;
 		lowerSide_ = SIDE::RIGHT;
 	}
 	//画面左下なら右に行く
 	if (lowerPos_.y >= maxPos_.y && lowerPos_.x <= minPos_.x)
 	{
-		lowerVec_ = { 20.0f ,0.0f };
+
+		//左に向かって走る
+		lowerVec_ = GO_TO_RIGHT;
 		lowerSide_ = SIDE::DOWN;
 	}
 	//画面左上なら下に行く
@@ -116,7 +171,7 @@ void OutSide::MoveChainExplosion(void)
 	upperPos_ += upperVec_;
 
 	//一定時間ごとに爆発させる、あと音も出す
-	if ((count_++) % 3 == 0)
+	if ((expSoundCount_++) % 3 == 0)
 	{
 		upBombs_.emplace_back(upperPos_, upperSide_);
 		downBombs_.emplace_back(lowerPos_, lowerSide_);
@@ -172,7 +227,7 @@ void OutSide::ExplosionDraw(void)
 	if (isExploding_)
 	{
 
-		if (expCount_ > EXPLOSION_IMG_NUM - 1)
+		if (expCount_ > IMG_EXP_ALL_NUM - 1)
 		{
 			expCount_ = 0;
 		}
@@ -250,20 +305,42 @@ void OutSide::FollowStateUpdate()
 
 void OutSide::SwitchingStateUpdate()
 {
-	if (switchingTime_ <= 60.0f) { switchingTime_++; }
-	outsidePos_.x = outsideOldPos_.x * (1.0f - switchingTime_ / 60.0f)+ camera_.GetTargetPos().x *  switchingTime_ / 60.0f;
-	outsidePos_.y = outsideOldPos_.y * (1.0f - switchingTime_ / 60.0f) + camera_.GetTargetPos().y *  switchingTime_ / 60.0f;
-	if (switchingTime_ >= 60.0f)
+	//カメラ座標
+	const Vector2DFloat& cameraPos = camera_.GetTargetPos();
+
+	//移行にかかる時間
+	float SWITCHING_TIME = switchingTime_ / 60.0f;
+	//1秒かけて0にする
+	float SWITCHING_RATE = (1.0f - switchingTime_ / 60.0f);
+
+	outsidePos_.x = 
+		outsideOldPos_.x * SWITCHING_RATE +
+		cameraPos.x * SWITCHING_TIME;
+
+	outsidePos_.y =
+		outsideOldPos_.y * SWITCHING_RATE +
+		cameraPos.y * SWITCHING_TIME;
+
+	//移行時間カウントが60を超えたらステートを変更して、
+	//switchingTime_をリセットする
+	if (switchingTime_ > MAX_SWITCHING_COUNT)
 	{
 		_update = &OutSide::FollowStateUpdate;
 		switchingTime_ = 0.0f;
+	}
+	else
+	{
+		switchingTime_++;
 	}
 }
 
 void OutSide::Draw(Vector2DFloat offset)
 {
+	//爆発描画
 	ExplosionDraw();
+	//大爆発描画
 	BigExplosionDraw();
+	//外枠描画
 	OutSideDraw();
 }
 
@@ -271,23 +348,35 @@ void OutSide::IsDead(std::vector< std::shared_ptr<Player >> players)
 {
  	for (const auto& player : players)
 	{
+		//プレイヤーがすでに脱落していたら抜ける
 		if (!player->IsAlive())
 		{
-			return;
+			continue;
 		}
+		//プレイヤーが枠の外に出たら死亡状態にする
 		if (!IsOutSide(player->GetPos()))
 		{
+			//爆発演出開始座標を設定
 			UpDownORLeftRight(player->GetPos());
-			player->Dead();
-			padNum_ = player->GetPadNum();
+			//爆発フラグをtrue
 			isExploding_ = true;
-			count_ = 0;
-			dangerZone_->ResetCounter();
-			playerCount_--;
+			//プレイヤーを志望状態に変更
+			player->Dead();
+			//死亡したプレイヤーのコントローラ番号を特定
+			padNum_ = player->padNum_;
+			//コントローラを振動させる
 			StartJoypadVibration(padNum_, 400, 300);
+			//爆発音再生カウントをリセット
+			expSoundCount_ = 0;
+			//画面縮小開始カウントをリセット
+			dangerZoneSmaller_->ResetCounter();
+			//残りプレイヤー数カウントを減らす
+			playerCount_--;
 		}
 	}
-	if (playerCount_<=1) {
+	//残りプレイヤー数が一人になったら対戦終了にする
+	if (playerCount_ <2) 
+	{
 		conclusion_ = true;
 	}
 }
@@ -298,7 +387,7 @@ bool OutSide::IsOutSide(Vector2DFloat pos)
 		maxPos_.x>pos.x && maxPos_.y>pos.y);
 }
 
-void OutSide::SinglePlay()
+void OutSide::SetSinglePlayMode()
 {
 	singlePlayFlag_=true;
 }

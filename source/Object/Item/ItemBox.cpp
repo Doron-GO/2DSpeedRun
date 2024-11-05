@@ -35,11 +35,10 @@ void ItemBox::Update()
 {	
 	for (const auto& player :players_)
 	{
-		auto& colRect = player->GetCol_Rect();
 		for (const auto& col : loadMap_.itemBoxGetColList())
 		{
 			//if (rayCast_.CheckCollision(col, player->pos_))
-			if (rayCast_.RectToRectCollision(colRect.min_, colRect.max_,col.first, col.second ))
+			if (rayCast_.RectToRectCollision(player->colRect_.min_, player->colRect_.max_,col.first, col.second ))
 			{
 				if (player->IsItem() == Player::ItemList::NON)
 				{

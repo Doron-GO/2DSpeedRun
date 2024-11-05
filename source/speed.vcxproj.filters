@@ -66,9 +66,6 @@
     <ClCompile Include="Object\Stage\CheckPoint.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Object\Shader\PostEfffect.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Object\Camera\Camera.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -185,9 +182,6 @@
     <ClInclude Include="Object\Stage\CheckPoint.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Object\Shader\PostEfffect.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Object\Camera\Camera.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -239,11 +233,5 @@
     <ClInclude Include="Config.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="Object\Shader\Explosion.hlsl" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Object\Shader\Pixel\PixelShader2DHeader.hlsli" />
   </ItemGroup>
 </Project>

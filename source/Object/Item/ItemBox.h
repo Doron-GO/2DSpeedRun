@@ -6,9 +6,9 @@
 #include"../../Common/Collision.h"
 #include"Missile.h"
 #include"Laser.h"
-#include"../Player/Player.h"
 
 class LoadMap;
+class Player;
 
 class ItemBox
 {

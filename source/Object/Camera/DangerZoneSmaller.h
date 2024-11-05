@@ -37,14 +37,6 @@ private:
 	//アップデート管理用メンバ関数ポインタ
 	void (DangerZoneSmaller::* _update)();
 
-	//縮小開始時間
-	static constexpr int SHRINK_START_TIME = 100;
-
-	//収縮するときの最小サイズ
-	const Vector2DFloat MAX_SHRINK_SIZE ={ 200.0f,150.0f };
-
-	//縮小量
-	const Vector2DFloat SCALE_STEP = { 0.2f, 0.13f };
 
 	//死亡エリアの座標の最大値(四角の右下)
 	Vector2DFloat& outSideMax_;

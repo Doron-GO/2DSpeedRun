@@ -26,9 +26,12 @@ private:
     //画像タイプ
     enum class IMG_TYPE
     {
-        GO,
-        READY
+        TITLE,
+        START,
+        SELECT
     };
+
+    static constexpr int SELECT_IMG_MAX =4;
 
     //効果音管理配列
     std::map<SOUND_TYPE, int> sounds_;
@@ -36,9 +39,7 @@ private:
     std::map<IMG_TYPE, int> img_;
 
     bool startFlag_;
-    int titleImg_;
-    int startImg_;
-    int selectImg_[4];
+    int selectImg_[SELECT_IMG_MAX];
     //プレイ人数
     int playModeNum_;
 };

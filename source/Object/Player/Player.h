@@ -51,6 +51,12 @@ public:
 	//これにオフセット値を渡し描画をずらすようにする
 	void Draw(Vector2DFloat cameraPos);
 
+	//特にギミックのない当たり判定リスト
+	ColList grndColList_;
+
+	//壁ジャンプができる当たり判定リスト
+	ColList wallcolList_;
+
 	//プレイヤー座標を取得する
 	const Vector2DFloat& GetPos();
 
@@ -59,6 +65,21 @@ public:
 
 	//プレイヤーの移動方向
 	const Vector2DFloat GetMoveVec();
+
+	//プレイヤーの座標
+	Vector2DFloat pos_;
+
+	//移動量
+	Vector2DFloat movePow_;	
+
+	//自分が何番目のPADを使っているか
+	int padNum_;
+
+	//キャラクターの向き
+	DIR_LR dir_LR_;
+
+	//矩形情報
+	COL_RECT colRect_;
 
 	//現在持っているアイテム
 	ItemList IsItem();
@@ -90,25 +111,13 @@ public:
 	void Conclusion();
 
 	//プレイヤーの所持しているアイテムの情報を取得する
-	const std::shared_ptr<ItemBase> GetItem() const;
+	const std::shared_ptr<ItemBase> GetItem();
 
 	//プレイヤーをダメージくらい状態にする
 	void Damage(ItemBase::ITEM_TYPE type);
 
-	const Vector2DFloat& GetPlayerPos(void)const;
-	void SetPlayerPos(Vector2DFloat& pos);
-
-	const Vector2DFloat& GetMovePow(void)const;
-
-	void SetMovePow(Vector2DFloat& pow);
-
-	const COL_RECT GetCol_Rect(void)const;
-
-	const int& GetPadNum(void)const;
-
-	const DIR_LR& GetDir_LR(void)const;
-
-	const bool& IsWin(void);
+	//勝利状態かどうかを返す
+	const bool IsWin();
 
 private:
 
@@ -130,28 +139,6 @@ private:
 		EXPLOSION = 0,
 		LAUNCHER 
 	};
-
-
-	//特にギミックのない当たり判定リスト
-	ColList grndColList_;
-
-	//壁ジャンプができる当たり判定リスト
-	ColList wallcolList_;
-
-	//プレイヤーの座標
-	Vector2DFloat pos_;
-
-	//移動量
-	Vector2DFloat movePow_;
-
-	//自分が何番目のPADを使っているか
-	int padNum_;
-
-	//キャラクターの向き
-	DIR_LR dir_LR_;
-
-	//矩形情報
-	COL_RECT colRect_;
 
 	//爆発音管理配列
 	std::map<EXP_SOUND_TYPE, int> explosionSounds_;
@@ -255,10 +242,10 @@ private:
 	void WinnerFallState(Input& input);
 	
 	//勝利状態じゃないかどうか判定
-	const bool& IsWinner(void);
+	bool IsWinner(void);
 
 	//スウィング状態でないかどうか判定
-	const bool& IsSwingState(void);
+	bool IsSwingState(void);
 
 	void (Player::* _damage)();
 	//プレイヤーダメージ
