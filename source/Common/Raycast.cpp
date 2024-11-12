@@ -41,15 +41,6 @@ bool Raycast::CheckCollision(Collision collision, Vec playerPos)
 bool Raycast::CheckRay(Ray ray, Line line, Vec offset)
 {
 
-    //デバッグ用の実際の当たり判定を赤いワイヤーフレームで表示する
-    //_dbgDrawLine(
-    //    static_cast<int>(line.p.x ),
-    //    static_cast<int>(line.p.y ),
-    //    static_cast<int>(line.end.x ),
-    //    static_cast<int>(line.end.y ),
-    //    0xff0000
-    //);
-
     auto checkCross = [](Vec vec1, Vec& vec2)
     {
         return (vec1.x*vec2.y)-(vec2.x*vec1.y);
@@ -67,11 +58,11 @@ bool Raycast::CheckRay(Ray ray, Line line, Vec offset)
 
    Vec v =  line.p- ray.p;
   
-   auto cross_vRay  = checkCross(v, ray.vec);
-   auto cross_vLine = checkCross(v, veclLine);
+   float cross_vRay  = checkCross(v, ray.vec);
+   float cross_vLine = checkCross(v, veclLine);
 
-  auto t1 = cross_vRay / crossRayLine;
-  auto t2 = cross_vLine / crossRayLine;
+  float t1 = cross_vRay / crossRayLine;
+  float t2 = cross_vLine / crossRayLine;
 
   if (t1 > 0.0 && t1 <= 1.0 && t2 > 0.0 && t2 <= 1.0)
   {

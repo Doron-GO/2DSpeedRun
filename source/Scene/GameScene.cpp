@@ -8,7 +8,6 @@
 #include "SceneMng.h"
 #include"../Config.h"
 
-
 #pragma region ƒpƒX
 
 const std::string PATH_SOUND_READY = PATH_SOUND + "Ready.mp4";

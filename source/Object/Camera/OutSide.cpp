@@ -37,6 +37,8 @@ const Vector2DFloat GO_TO_RIGHT = { 20.0f,0.0f };
 //è„Ç…å¸Ç©Ç¡ÇƒëñÇÈ
 const Vector2DFloat GO_TO_UP = { 0.0f,-20.0f };
 
+const int VIBRATION_POW = 400;
+
 
 OutSide::OutSide(Camera& camera, int playerCount) :camera_(camera), playerCount_(playerCount)
 {
@@ -468,12 +470,6 @@ void OutSide::LeftOrRight(Vector2DFloat pos)
 	upperPos_ = up;
 	lowerPos_ = low ;
 }
-
-
-//const int OutSide::NumberOfSurvivors()
-//{
-//	return playerCount_;
-//}
 
 void OutSide::SideChange(Vector2DFloat& pos, SIDE side_)
 {

@@ -2,7 +2,7 @@
 #include <DxLib.h>
 #include "IrisTransitor.h"
 
-IrisTransitor::IrisTransitor(bool irisOut, int interval, bool isTiled, int gHandle) 
+IrisTransitor::IrisTransitor(bool irisOut, float interval,  bool isTiled, int gHandle)
 	:Transitor(interval),irisOut_(irisOut),isTiled_(isTiled),gHandle_(gHandle)
 {
 	//ウィンドウサイズ
@@ -24,11 +24,10 @@ IrisTransitor::~IrisTransitor()
 void IrisTransitor::Update()
 {
 	if (frame_ < interval_) {
-		//++frame_;
-		frame_+=2;
+		frame_+= 2.0f ;
 		SetDrawScreen(newRT_);
 	}
-	else if (frame_ == interval_) {
+	else if (frame_ >= interval_) {
 		SetDrawScreen(DX_SCREEN_BACK);
 	}
 }
@@ -39,7 +38,7 @@ void IrisTransitor::Draw()
 		return;
 	}
 
-	auto rate = (float)frame_ / (float)interval_;
+	auto rate = frame_ / interval_;
 	int backRT = oldRT_;
 	int maskedRT = newRT_;
 	if (irisOut_) {
@@ -52,7 +51,7 @@ void IrisTransitor::Draw()
 	SetDrawScreen(handleForMaskScreen_);
 	ClearDrawScreen();
 
-	VECTOR pos = { 1024 / 2,768 / 2 };
+	VECTOR pos = { 1600.0f / 2.0f,1000.0f / 2.0f };
 	DrawCircleAA(pos.x, pos.y, radius, 32, 0xffffff, true);
 
 	//隠し関数(現在のグラフィックハンドルをマスクスクリーンに転送)

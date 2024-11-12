@@ -5,7 +5,7 @@ class IrisTransitor :
     public Transitor
 {
 public:
-	IrisTransitor(bool irisOut = false, int interval = 60, bool isTiled = false, int gHandle = -1);
+	IrisTransitor(bool irisOut = false, float interval = 60.0f, bool isTiled = false, int gHandle = -1);
 	~IrisTransitor();
 	virtual void Update() override;
 	virtual void Draw() override;
