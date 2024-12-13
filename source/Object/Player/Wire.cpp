@@ -46,13 +46,16 @@ void Wire::SwingState()
 	float gravity = 0.5f;
 	//アングルをけってい
 	angle_ = atan2f(player_.pos_.x - fulcrum_.x, player_.pos_.y - fulcrum_.y);
+	//今いる角度によって力を求める
 	v_ += gravity * sinf(angle_);
+	//角度からXY方向(ベクトル)を求め、X方向については正負を逆転させ、進行移動量を算出する
 	vel_ = { -v_ * cosf(angle_),v_ * sinf(angle_) };
 	Vector2DFloat vel = { vel_.x,vel_.y };
 	if (_state == &Wire::SwingState)
 	{
-		player_.pos_ = fulcrum_ + (player_.pos_ - fulcrum_).Normalized() * length_;//長さを補正
 		player_.pos_ += vel;	//velを加算
+		player_.pos_ = fulcrum_ + (player_.pos_ - fulcrum_).Normalized() * length_;//長さを補正
+
 	}
 	if (player_.pos_.y <= fulcrum_.y + -150.0f)
 	{

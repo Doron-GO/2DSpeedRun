@@ -68,8 +68,6 @@ constexpr int PLAY_MODE_MIN = 1;
 TitleScene::TitleScene(SceneMng& manager, int number_of_Players, Transitor& transit) :Scene(manager, number_of_Players,transit),
 playModeNum_(1),startFlag_(false)
 {
-	//トランジションの開始
-	sceneTransitor_.Start();
 	
 	//画像の読み込み
 	img_.emplace(IMG_TYPE::TITLE, LoadGraph(PATH_IMG_TITLE.c_str()));
@@ -85,6 +83,8 @@ playModeNum_(1),startFlag_(false)
 	//音の読み込み
 	sounds_.emplace(SOUND_TYPE::CURSOR,LoadSoundMem(PATH_SOUND_CURSOR.c_str()));
 	sounds_.emplace(SOUND_TYPE::PUSH,LoadSoundMem(PATH_SOUND_PUSH.c_str()));
+	//トランジションの開始
+	sceneTransitor_.Start();
 
 }
 

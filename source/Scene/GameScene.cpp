@@ -98,8 +98,6 @@ const float PLUS_TIME = 2.0f;
 GameScene::GameScene(SceneMng& manager, int number_of_Players, Transitor& transit):Scene(manager, number_of_Players, transit),
 playType_(number_of_Players),_update(&GameScene::UpdateBattleMode)
 {	
-	//トランジションのスタート
-	sceneTransitor_.Start();
 	
 	//オブジェクトの生成
 	CreateObject();
@@ -125,6 +123,9 @@ playType_(number_of_Players),_update(&GameScene::UpdateBattleMode)
 	deltaTime.Reset();
 	//ゲームスタート開始計測用変数の初期化
 	startTime_ = deltaTime.GetElapsedTime();
+
+	//トランジションのスタート
+	sceneTransitor_.Start();
 
 }
 
